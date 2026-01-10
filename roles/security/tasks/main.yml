@@ -1,0 +1,21 @@
+---
+- name: Install openssh-server if not installed
+  ansible.builtin.apt:
+    name: openssh-server 
+    state: present
+
+- name: Ensure openssh-server is running
+  ansible.builtin.service:
+    name: openssh-server 
+    state: started
+    enabled: true
+
+- name: Lock root account
+  ansible.builtin.user:
+    name: root
+    password_lock: yes
+
+- name: Install libpam-pwquality
+  ansible.builtin.apt:
+    name: libpam-pwquality
+    state: present

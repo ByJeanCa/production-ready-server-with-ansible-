@@ -1,0 +1,18 @@
+---
+- name: Ensure Docker daemon is running
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ users }}"
+    groups: docker
+    append: true
+  notify:
+    - restart-docker
+
+
+
+
