@@ -1,0 +1,22 @@
+# SSH hardening - managed by Ansible
+# This file is included from /etc/ssh/sshd_config
+# DO NOT add Include directives here
+
+Port 2222
+
+# Authentication
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+UsePAM yes
+
+# Access control
+AllowUsers ubuntu{% if users is defined %}{% for u in users %} {{ u }}{% endfor %}{% endif %}
+
+# Security hardening
+MaxAuthTries 3
+X11Forwarding no
+
+# Environment
+AcceptEnv LANG LC_*

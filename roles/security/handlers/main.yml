@@ -1,0 +1,13 @@
+---
+- name: restart ssh.socket (regenerates generator config)
+  ansible.builtin.systemd:
+    name: ssh.socket
+    state: restarted
+    daemon_reload: true
+  listen: restart-ssh
+
+- name: restart ssh.service (pick up new socket fds)
+  ansible.builtin.systemd:
+    name: ssh.service
+    state: restarted
+  listen: restart-ssh
