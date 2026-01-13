@@ -11,3 +11,8 @@
     name: ssh.service
     state: restarted
   listen: restart-ssh
+
+- name: restart-fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: restarted

@@ -30,4 +30,5 @@
     name: 
       - curl
       - ufw
+      - fail2ban
     state: present
