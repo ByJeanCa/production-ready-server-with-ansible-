@@ -32,9 +32,9 @@
   ansible.builtin.set_fact:
     sshd_lines: "{{ ss_output.stdout_lines | select('search', 'sshd') | list }}"
 
-- name: Assert sshd is listening on port 2222
+- name: Assert sshd is listening on port {{ new_port }}
   ansible.builtin.assert:
     that: 
-      - (sshd_lines | select('search', ':2222\\b') | list | length) > 0
-    fail_msg: "sshd is NOT listening on 2222. Lines found: {{ sshd_lines }}"
-    success_msg: "sshd is listening en 2222"
+      - (sshd_lines | select('search', ':' ~ new_port ~ '\\b') | list | length) > 0
+    fail_msg: "sshd is NOT listening on {{ new_port }} Lines found: {{ sshd_lines }}"
+    success_msg: "sshd is listening on {{ new_port }}"

@@ -29,4 +29,5 @@
   ansible.builtin.apt:
     name: 
       - curl
+      - ufw
     state: present
