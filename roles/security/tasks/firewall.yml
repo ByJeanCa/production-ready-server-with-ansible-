@@ -1,0 +1,11 @@
+---
+- name: Rate-limit access on port {{ new_port }} (UFW)
+  ansible.builtin.ufw:
+    rule: limit
+    port: "{{ new_port }}"
+    proto: tcp
+  
+- name: Enable UFW
+  ansible.builtin.ufw:
+    state: enabled
+    

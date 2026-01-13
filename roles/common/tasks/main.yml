@@ -1,26 +1,34 @@
 ---
-- name: Update server packages
+- name: Update apt cache
   ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
 
+- name: Upgrade packages
+  ansible.builtin.apt:
+    upgrade: yes
+    
 - name: Set timezone to Costa Rica and update hardware clock
   ansible.builtin.timezone:
     name: "{{ timezone  }}"
 
 - name: Create dev users
   ansible.builtin.user:
-    name: 
-      "{{ users }}"
+    name: "{{ item }}"
     state: present
-    shell: /bin/bash
-
+    shell: "{{ default_shell }}"
+    groups: sudo
+    append: yes
+  loop: "{{ users }}"
+  
 - name: Set hostname
   ansible.builtin.hostname:
     name: "{{ hostname }}"
 
 - name: Install neccessary packages
-  ansuble.builtin.apt:
+  ansible.builtin.apt:
     name: 
       - curl
+      - ufw
+      - fail2ban
     state: present

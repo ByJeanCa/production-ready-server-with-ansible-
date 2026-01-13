@@ -1,0 +1,12 @@
+---
+- name: Include Ansible SSH-Hardening tasks
+  ansible.builtin.include_tasks: ssh_hardening.yml
+
+- name: Include key authentication tasks
+  ansible.builtin.include_tasks: key_authentication.yml
+
+- name: Include Ansible Firewall configuration tasks
+  ansible.builtin.include_tasks: firewall.yml
+
+- name: Include fail2ban tasks
+  ansible.builtin.include_tasks: fail2ban.yml

@@ -1,0 +1,10 @@
+---
+- name: Setup linux servers
+  hosts: dev
+  become: true
+  vars_files:
+    - main.yml
+  roles: 
+    - common
+    - security
+    - docker
