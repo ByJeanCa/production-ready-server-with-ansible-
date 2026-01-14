@@ -14,12 +14,11 @@
 
 - name: Create dev users
   ansible.builtin.user:
-    name: "{{ item }}"
+    name: "{{ user }}"
     state: present
     shell: "{{ default_shell }}"
     groups: sudo
     append: yes
-  loop: "{{ users }}"
   
 - name: Set hostname
   ansible.builtin.hostname:
