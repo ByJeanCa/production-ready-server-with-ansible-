@@ -7,7 +7,7 @@
     group: "{{ user }}"
     mode: 0755
 
-- name: Setup default configuration file
+- name: Setup reverse proxy and gitdefault configuration 
   ansible.builtin.template:
     src: templates/nginx_sites_conf.j2
     dest: "/etc/nginx/sites-available/{{ domain }}"
