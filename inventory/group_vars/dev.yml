@@ -2,3 +2,4 @@ hostname: dev
 timezone: UTC
 default_shell: /bin/bash
 new_port: 2222
+domain: veliacr.com

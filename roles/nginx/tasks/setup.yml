@@ -1,0 +1,28 @@
+---
+- name: Create domain directory
+  ansible.builtin.file:
+    path: "/var/www/{{ domain }}/html"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
+- name: Setup default configuration file
+  ansible.builtin.template:
+    src: templates/nginx_sites_conf.j2
+    dest: "/etc/nginx/sites-available/{{ domain }}"
+
+- name: Enable site (symlink)
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ domain }}"
+    dest: "/etc/nginx/sites-enabled/{{ domain }}"
+    state: link
+
+- name: Validate nginx configuration
+  ansible.builtin.command: nginx -t
+  register: nginx_test
+  changed_when: false
+  failed_when: nginx_test.rc != 0
+  notify: reload-nginx
+  
+  

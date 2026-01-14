@@ -1,0 +1,16 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Allow nginx HTTP traffic
+  ansible.builtin.ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: Ensure nginx is running
+  ansible.builtin.service:
+    name: nginx
+    state: started
