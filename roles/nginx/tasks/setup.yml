@@ -9,7 +9,7 @@
 
 - name: Setup default configuration 
   ansible.builtin.template:
-    src: templates/nginx_sites_conf.j2
+    src: templates/nginx_sites.conf.j2
     dest: "/etc/nginx/sites-available/{{ domain }}"
     mode: "0644"
   notify: Validate and reload nginx
