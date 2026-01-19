@@ -3,3 +3,15 @@ timezone: UTC
 default_shell: /bin/bash
 new_port: 2222
 domain: veliacr.com
+
+certbot_admin_email: jo7624822@gmail.com
+certbot_create_if_missing: true
+certbot_create_method: webroot
+certbot_webroot: "/var/www/{{ domain }}/html"
+certbot_webroot_path: "/var/www/{{ domain }}/html"
+certbot_auto_renew: true
+
+certbot_certs:
+  - domains:
+      - veliacr.com
+      - www.veliacr.com

@@ -1,0 +1,32 @@
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name {{ domain }} www.{{ domain }};
+
+  # ACME challenge (para renovar sin apagar nginx)
+  location ^~ /.well-known/acme-challenge/ {
+    root /var/www/{{ domain }}/html;
+    default_type "text/plain";
+  }
+
+  # Redirect a HTTPS
+  return 301 https://$host$request_uri;
+}
+
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+
+  server_name {{ domain }} www.{{ domain }};
+
+  ssl_certificate     /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ domain }}/privkey.pem;
+
+  root /var/www/{{ domain }}/html;
+  index index.html index.htm;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+}

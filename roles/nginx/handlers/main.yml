@@ -1,4 +1,8 @@
-- name: Reload nginx
-  ansible.builtin.systemd:
-    name: nginx
-    state: restarted
+- name: Validate and reload nginx
+  listen: Validate and reload nginx
+  ansible.builtin.shell: |
+    nginx -t
+    systemctl reload nginx
+  args:
+    executable: /bin/bash
+  changed_when: false

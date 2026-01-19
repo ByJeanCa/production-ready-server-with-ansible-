@@ -4,10 +4,16 @@
     name: nginx
     state: present
 
-- name: Allow nginx HTTP traffic
+- name: Allow HTTP 
   ansible.builtin.ufw:
     rule: allow
     port: 80
+    proto: tcp
+
+- name: Allow HTTPS
+  ansible.builtin.ufw:
+    rule: allow
+    port: 443
     proto: tcp
 
 - name: Ensure nginx is running

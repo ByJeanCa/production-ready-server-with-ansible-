@@ -3,26 +3,30 @@
   ansible.builtin.file:
     path: "/var/www/{{ domain }}/html"
     state: directory
-    owner: "{{ user }}"
-    group: "{{ user }}"
+    owner: www-data
+    group: www-data
     mode: 0755
 
-- name: Setup reverse proxy and gitdefault configuration 
+- name: Setup default configuration 
   ansible.builtin.template:
     src: templates/nginx_sites_conf.j2
     dest: "/etc/nginx/sites-available/{{ domain }}"
+    mode: "0644"
+  notify: Validate and reload nginx
+
+- name: Copy index html
+  ansible.builtin.copy:
+    src: templates/index.html
+    dest: "/var/www/{{ domain }}/html/index.html"
+    mode: "0644"
+  notify: Validate and reload nginx
 
 - name: Enable site (symlink)
   ansible.builtin.file:
     src: "/etc/nginx/sites-available/{{ domain }}"
     dest: "/etc/nginx/sites-enabled/{{ domain }}"
     state: link
-
-- name: Validate nginx configuration
-  ansible.builtin.command: nginx -t
-  register: nginx_test
-  changed_when: false
-  failed_when: nginx_test.rc != 0
-  notify: reload-nginx
+  notify: Validate and reload nginx
   
-  
+- name: Apply nginx conf immediately
+  meta: flush_handlers
