@@ -1,0 +1,32 @@
+---
+- name: Create domain directory
+  ansible.builtin.file:
+    path: "/var/www/{{ domain }}/html"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+
+- name: Setup default configuration 
+  ansible.builtin.template:
+    src: templates/nginx_sites.conf.j2
+    dest: "/etc/nginx/sites-available/{{ domain }}"
+    mode: "0644"
+  notify: Validate and reload nginx
+
+- name: Copy index html
+  ansible.builtin.copy:
+    src: templates/index.html
+    dest: "/var/www/{{ domain }}/html/index.html"
+    mode: "0644"
+  notify: Validate and reload nginx
+
+- name: Enable site (symlink)
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ domain }}"
+    dest: "/etc/nginx/sites-enabled/{{ domain }}"
+    state: link
+  notify: Validate and reload nginx
+  
+- name: Apply nginx conf immediately
+  meta: flush_handlers

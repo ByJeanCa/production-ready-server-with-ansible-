@@ -1,0 +1,22 @@
+---
+- name: Include nginx install tasks
+  ansible.builtin.include_tasks: install.yml
+
+- name: Include nginx setup tasks
+  ansible.builtin.include_tasks: setup.yml
+
+- name: Include certificate installation tasks
+  ansible.builtin.include_tasks: certbot.yml
+
+- name: Check if cert exists
+  ansible.builtin.stat:
+    path: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem"
+  register: cert_file
+
+- name: Deploy HTTPS nginx config (only if cert exists)
+  ansible.builtin.template:
+    src: templates/nginx_sites_https.conf.j2
+    dest: "/etc/nginx/sites-available/{{ domain }}"
+    mode: "0644"
+  when: cert_file.stat.exists
+  notify: Validate and reload nginx

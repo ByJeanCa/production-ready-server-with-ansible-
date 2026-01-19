@@ -2,29 +2,23 @@
 - name: Generate SSH keypair locally (ed25519)
   community.crypto.openssh_keypair:
     type: ed25519
-    path: "{{ lookup('env','HOME') + '/.ssh/' + item + '_deploy_ec2' }}"
+    path: "{{ lookup('env','HOME') + '/.ssh/' + user + '_deploy_ec2' }}"
     force: false
   delegate_to: localhost
   become: false
   run_once: true
-  loop: "{{ users }}"
   
-
-
-- name: Ensure .ssh exists for user {{ item }}
+- name: Ensure .ssh exists for user {{ user }}
   ansible.builtin.file:
-    path: "/home/{{ item }}/.ssh"
+    path: "/home/{{ user }}/.ssh"
     state: directory
-    owner: "{{ item }}"
-    group: "{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: "0700"
-  loop: "{{ users }}"
 
-
-- name: Install public key for user {{ item }}
+- name: Install public key for user {{ user }}
   ansible.posix.authorized_key:
-    user: "{{ item }}"
+    user: "{{ user }}"
     state: present
-    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/' + item + '_deploy_ec2.pub') }}"
-  loop: "{{ users }}"
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/' + user + '_deploy_ec2.pub') }}"
 
