@@ -1,9 +1,7 @@
 ---
-- name: Setup linux servers
+- name: Boostrap linux servers
   hosts: dev
   become: true
-  serial: 1
-  any_errors_fatal: true
   vars_files:
     - main.yml
   roles: 
@@ -11,4 +9,3 @@
     - security
     - docker
     - nginx
-    - app
