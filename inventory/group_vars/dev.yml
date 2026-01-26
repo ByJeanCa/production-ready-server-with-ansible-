@@ -3,6 +3,7 @@ timezone: UTC
 default_shell: /bin/bash
 new_port: 2222
 domain: veliacr.com
+project_path: "/home/{{ user }}/projects/mi-app/"
 
 certbot_admin_email: jo7624822@gmail.com
 certbot_create_if_missing: true

@@ -1,0 +1,38 @@
+- name: Ensure app directory exists
+  ansible.builtin.file:
+    path: "{{ project_path }}"
+    state: directory
+
+- name: Copy app and container files
+  ansible.builtin.synchronize:
+    src: /Users/jeancarloalvarado/Documents/proyectos/flask_calc/
+    dest: "{{ project_path }}"
+    delete: yes
+    rsync_opts:
+      - "--exclude=venv/"
+      - "--exclude=__pycache__/"
+      - "--exclude=.git/"
+      - "--exclude=*.pyc"
+
+- name: Docker compose up --build -d
+  community.docker.docker_compose_v2:
+    project_src: "{{ project_path }}"
+    build: policy
+
+- name: Wait for HTTPS health endpoint
+  ansible.builtin.uri:
+    url: "https://{{ domain }}.com/health"
+    method: GET
+    status_code: 200
+    return_content: no
+  register: health
+  retries: 30
+  delay: 2
+  until: health.status == 200
+
+- name: Display health result
+  ansible.builtin.debug:
+    msg: "Healthcheck passed!"
+  when: health.status == 200
+
+

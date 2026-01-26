@@ -1,0 +1,2 @@
+- name: Include tasks to build and run app cont
+  ansible.builtin.include_tasks: build-up.yml

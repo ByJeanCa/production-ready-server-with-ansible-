@@ -23,6 +23,10 @@
 - name: Apply SSH changes immediately
   meta: flush_handlers
 
+- name: Switch Ansible to new SSH port
+  set_fact:
+    ansible_port: "{{ new_port }}"
+
 - name: Get listening TCP/UDP sockets
   ansible.builtin.command: ss -tulnp
   register: ss_output

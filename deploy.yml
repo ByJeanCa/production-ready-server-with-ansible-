@@ -1,0 +1,5 @@
+- name: Deploy app
+  hosts: dev
+  become: true
+  serial: 1
+  any_errors_fatal: true
