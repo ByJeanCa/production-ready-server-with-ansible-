@@ -13,11 +13,25 @@
       - "--exclude=__pycache__/"
       - "--exclude=.git/"
       - "--exclude=*.pyc"
+      - "--exclude=.env"
+      - "--checksum"
+      - "--omit-dir-times"
+      - "--no-perms"
+      - "--no-owner"
+      - "--no-group"
+      
 
-- name: Docker compose up --build -d
-  community.docker.docker_compose_v2:
-    project_src: "{{ project_path }}"
-    build: policy
+- name: Create app .env for docker compose
+  template:
+    src: app.env.j2
+    dest: "{{ project_path }}/.env"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Compose up
+  diff: true 
+
+- meta: flush_handlers
 
 - name: Wait for HTTPS health endpoint
   ansible.builtin.uri:
