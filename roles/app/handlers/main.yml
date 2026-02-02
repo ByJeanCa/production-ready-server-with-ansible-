@@ -1,0 +1,7 @@
+- name: Compose up
+  community.docker.docker_compose_v2:
+    project_src: "{{ project_path }}"
+    pull: policy
+    build: policy
+    state: present
+    recreate: auto
