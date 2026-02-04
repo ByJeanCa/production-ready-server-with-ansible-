@@ -2,6 +2,9 @@
   ansible.builtin.file:
     path: "{{ project_path }}"
     state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    
 
 - name: Copy app and container files
   ansible.builtin.synchronize:
