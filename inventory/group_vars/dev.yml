@@ -5,6 +5,13 @@ new_port: 2222
 domain: veliacr.com
 project_path: "/home/{{ user }}/projects/mi-app/"
 
+S3_BUCKET: "db-backups-jeanca-dev-20260204"
+
+cron_user: "{{ user }}"
+backup_script_path: "{{ project_path }}/backup.sh"
+log_path: "{{ project_path }}/backup.log"
+
+
 certbot_admin_email: jo7624822@gmail.com
 certbot_create_if_missing: true
 certbot_create_method: webroot
