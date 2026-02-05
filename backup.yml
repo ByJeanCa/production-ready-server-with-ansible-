@@ -1,0 +1,8 @@
+---
+- name: Configure automated database backups
+  hosts: dev
+  become: true
+  vars_files:
+    - main.yml
+  roles: 
+    - backup

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd "{{ project_path }}"
+
+set -euo pipefail
+
+set -a
+source .env
+set +a
+
+DATE="$(date +'%Y-%m-%d_%H-%M-%S')"
+BACKUP_KEY="${DB_NAME}_backup_${DATE}.sql.gz"
+S3_BUCKET="{{ S3_BUCKET }}"
+
+DB_CONTAINER="$(docker ps -q -f "label=com.docker.compose.service=db" | head -n 1)"
+
+docker compose exec -T db pg_dump -U "$DB_USER" -d "$DB_NAME" | gzip | aws s3 cp - "s3://${S3_BUCKET}/${BACKUP_KEY}"

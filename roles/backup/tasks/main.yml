@@ -1,0 +1,20 @@
+- name: Copy backup script to sv
+  ansible.builtin.template:
+    src: templates/backup.sh.j2
+    dest: "{{ project_path }}/backup.sh"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0755
+
+- name: Setup default configuration 
+  ansible.builtin.template:
+    src: templates/backup-cron.j2
+    dest: "/etc/cron.d/db-backup"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Restart cron to ensure new job is picked up
+  ansible.builtin.service:
+    name: cron
+    state: restarted

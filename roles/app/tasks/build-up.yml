@@ -2,6 +2,9 @@
   ansible.builtin.file:
     path: "{{ project_path }}"
     state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    
 
 - name: Copy app and container files
   ansible.builtin.synchronize:
@@ -25,8 +28,8 @@
   template:
     src: app.env.j2
     dest: "{{ project_path }}/.env"
-    owner: root
-    group: root
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: "0600"
   notify: Compose up
   diff: true 

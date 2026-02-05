@@ -30,4 +30,8 @@
       - curl
       - ufw
       - fail2ban
+      - unzip
     state: present
+
+- name: Include tasks aws cli instalation
+  ansible.builtin.include_tasks: awscli.yml
