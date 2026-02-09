@@ -1,0 +1,6 @@
+# Managed by Ansible - Healtcheck DB Cron
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+{{ cron_minute | default('*/5') }} {{ cron_hour | default('*') }} {{ cron_day | default('*') }} {{ cron_month | default('*') }} {{ cron_weekday | default('*') }} {{ user }} {{ scripts_path }}healtcheck.sh >> {{ log_path_healtchecks }} 2>&1
