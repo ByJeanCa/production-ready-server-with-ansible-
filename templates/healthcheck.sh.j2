@@ -1,0 +1,52 @@
+#!/bin/bash
+
+cd "{{ project_path }}"
+
+set -euo pipefail
+
+DB_CONTAINER="$(docker ps -q -f "label=com.docker.compose.service=db" | head -n 1)"
+COOLDOWN_SECONDS=20
+ALERT_FILE="/var/tmp/db_health_last_alert"
+
+if [ ! -f "$ALERT_FILE" ]; then
+    echo 0 > "$ALERT_FILE"
+fi
+
+LAST=$(cat "$ALERT_FILE")
+NOW=$(date +%s)
+ELAPSED=$((NOW - LAST))
+
+if [ -z "$DB_CONTAINER" ]; then
+  if [[ "$ELAPSED" -gt "$COOLDOWN_SECONDS" ]]; then
+    aws sns publish \
+      --topic-arn "{{ TOPIC_ARN }}" \
+      --subject "DB Health Alert" \
+      --message "Database is NOT RUNNING at $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+    echo "$NOW" > "$ALERT_FILE"
+  fi
+  exit 1
+fi
+
+db_status=$(docker inspect -f {{ '{{.State.Health.Status}}' }} "$DB_CONTAINER")
+echo "$db_status"
+
+if [[ "$db_status" == "starting" ]]; then
+  exit 0
+fi
+
+if [[ "$db_status" == "healthy" ]]; then
+  exit 0
+fi
+
+if [[ "$db_status" == "unhealthy" ]]; then
+  if [[ "$ELAPSED" -gt "$COOLDOWN_SECONDS" ]]; then
+    aws sns publish \
+      --topic-arn "{{ TOPIC_ARN }}" \
+      --subject "DB Health Alert" \
+      --message "Database is unhealthy at $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+    echo "$NOW" > "$ALERT_FILE"
+  fi
+  exit 1
+fi
+
+exit 1

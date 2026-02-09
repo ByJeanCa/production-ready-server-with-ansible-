@@ -4,12 +4,14 @@ default_shell: /bin/bash
 new_port: 2222
 domain: veliacr.com
 project_path: "/home/{{ user }}/projects/mi-app/"
+scripts_path: "/home/{{ user }}/projects/scripts/"
 
 S3_BUCKET: "db-backups-jeanca-dev-20260204"
+S3_PREFIX: "backups"
+TOPIC_ARN: arn:aws:sns:us-east-1:805206611903:db-script-sns-topic
 
-cron_user: "{{ user }}"
-backup_script_path: "{{ project_path }}/backup.sh"
-log_path: "{{ project_path }}/backup.log"
+log_path_backups: "{{ scripts_path }}backup.log"
+log_path_healtchecks: "{{ scripts_path }}/healtcheck.log"
 
 
 certbot_admin_email: jo7624822@gmail.com
@@ -24,3 +26,8 @@ certbot_certs:
   - domains:
       - veliacr.com
       - www.veliacr.com
+
+cw_region: us-east-1
+log_group_docker: /ec2/docker
+docker_log_path: /var/lib/docker/containers/*/*-json.log
+
