@@ -22,6 +22,7 @@
       - "--no-perms"
       - "--no-owner"
       - "--no-group"
+  notify: Compose up
       
 
 - name: Create app .env for docker compose
