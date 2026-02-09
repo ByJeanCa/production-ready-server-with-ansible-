@@ -22,6 +22,7 @@
       - "--no-perms"
       - "--no-owner"
       - "--no-group"
+  notify: Compose up
       
 
 - name: Create app .env for docker compose
@@ -32,7 +33,7 @@
     group: "{{ user }}"
     mode: "0600"
   notify: Compose up
-  diff: true 
+  no_log: true
 
 - meta: flush_handlers
 

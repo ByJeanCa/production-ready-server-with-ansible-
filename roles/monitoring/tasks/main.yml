@@ -1,0 +1,5 @@
+- name: Setup CloudWatch Agent
+  ansible.builtin.include_tasks: cloudwatch-agent.yml
+
+- name: Setup healtchecks
+  ansible.builtin.include_tasks: healtchecks.yml

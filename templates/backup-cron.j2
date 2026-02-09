@@ -3,4 +3,4 @@
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-{{ cron_minute | default('*') }} {{ cron_hour | default('*') }} {{ cron_day | default('*') }} {{ cron_month | default('*') }} {{ cron_weekday | default('*') }} {{ cron_user }} {{ backup_script_path }} >> {{ log_path }} 2>&1
+{{ cron_minute | default('*/5') }} {{ cron_hour | default('*') }} {{ cron_day | default('*') }} {{ cron_month | default('*') }} {{ cron_weekday | default('*') }} {{ user }} {{ scripts_path }}backup.sh >> {{ log_path_backups }} 2>&1

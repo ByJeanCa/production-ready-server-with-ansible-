@@ -1,7 +1,14 @@
+- name: Ensure script path exists
+  ansible.builtin.file:
+    path: "{{ scripts_path }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
 - name: Copy backup script to sv
   ansible.builtin.template:
     src: templates/backup.sh.j2
-    dest: "{{ project_path }}/backup.sh"
+    dest: "{{ scripts_path }}/backup.sh"
     owner: "{{ user }}"
     group: "{{ user }}"
     mode: 0755
